@@ -1,14 +1,50 @@
 const { request, response } = require('express')
 const {validationResult} = require('express-validator')
+const Usuario = require('../models/User');
+ 
 
-const newUser = (req = request, res = response) => {
-    // obtener el body de la peticion
-    console.log(req.body)
+const newUser = async (req = request, res = response) => {
+    
+    const { name, email, password} = req.body
 
-    return res.status(200).json({
-        ok: true,
-        msg: 'El usuario será procesado...'
-    });
+    try {
+            
+        //Verificar el email
+        //con la funcion findOne de mongoose podemos buscar algo 
+        const usuario = await Usuario().findOne({email});
+        
+        if(usuario){
+            return res.status(400).json({
+                ok: false,
+                msg: 'Ya hay un usuario con el mismo correo.'
+            })
+        }
+
+        //Crear el usuario con el correo 
+        const dbUsuario = new Usuario( req.body );
+
+        //hashear la contraseña 
+
+
+        //Generare el JWT
+
+
+        //Crear el registro en la base de datos     
+        await dbUsuario.save();
+        //Generar respuesta exitosa 
+        return res.status(200).json({
+            ok: true,
+            uid: dbUsuario.id,
+            msg: `El usuario ${name} fue creado exitosamente`
+        })
+       
+    } catch (error) {
+        return res.status(500).json({
+            ok: false,
+            msg: 'Por favor, hable con el administrador'
+        });
+    }
+    
 }
 
 
