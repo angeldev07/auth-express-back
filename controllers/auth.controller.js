@@ -6,6 +6,7 @@ const Usuario = require('../models/User');
 const newUser = async (req = request, res = response) => {
     
     const { name, email, password} = req.body
+    console.log(req.body);
 
     try {
             
