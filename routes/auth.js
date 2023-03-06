@@ -3,6 +3,7 @@ const {Router} = require('express');
 const {newUser, login, tokenValidator } = require('../controllers/auth.controller')
 const { check } = require('express-validator');
 const { validarCampos } = require('../middleware/validarCampos');
+const { validateHeaderJWT } = require('../middleware/validar-jwt');
 // Con el Router, creamos un enrutador 
 const router = Router()
 
@@ -22,7 +23,7 @@ router.post('/login',[
 ] ,login)
 
 // Endpoint para validar y revalidar un token
-router.get('/renew', tokenValidator)
+router.get('/renew',validateHeaderJWT ,tokenValidator)
 
 
 

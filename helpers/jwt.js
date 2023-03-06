@@ -8,7 +8,7 @@ const generarJWT = ( {uid, nombre} ) => {
     /* Creamos una promera para volverlo async */
     return new Promise( (resolve, reject) => {
 
-        jwt.sign(payload, process.env.SECRET_JWT_SEDD, {
+        jwt.sign(payload, process.env.SECRET_JWT_SEED, {
             expiresIn: '1h'
         }, (err, token) => {
             if(err) 
