@@ -101,10 +101,19 @@ const login = async (req = request , res = response) => {
 
 }
 
-const tokenValidator = (req = request, res = response) => {
+const tokenValidator =  async (req = request, res = response) => {
+    /* Obtenemos los datos de la request */
+    const {uid, nombre} = req;
+    
+    /* Generamos un nuevo JWT */
+    const token = await generarJWT({uid,nombre})
+
     return res.json({
         ok: true,
-        msg: 'token validator'
+        uid,
+        nombre,
+        token,
+        msg: 'token validato'
     });
 }
 

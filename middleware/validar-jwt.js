@@ -13,8 +13,10 @@ const validateHeaderJWT  = (req = request, res = response, next) => {
     }
 
     try {
-        const {uid, name} = jwt.verify(tokenHeader, process.env.SECRET_JWT_SEED)
-        console.log({uid, name});
+        const {uid, nombre} = jwt.verify(tokenHeader, process.env.SECRET_JWT_SEED)
+        /* Modificamos la request para enviarla en la respuesta al front */
+        req.uid = uid;
+        req.nombre = nombre;
     } catch (error) {
         return res.status(401).json({
             ok: false,
