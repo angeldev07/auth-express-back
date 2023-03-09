@@ -4,7 +4,6 @@ const generarJWT = ( {uid, nombre} ) => {
     
     //información que se encripta para autenticar
     const payload = {uid,nombre};
-
     /* Creamos una promera para volverlo async */
     return new Promise( (resolve, reject) => {
 

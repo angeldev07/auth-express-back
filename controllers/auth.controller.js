@@ -25,12 +25,12 @@ const newUser = async (req = request, res = response) => {
 
         //Crear el usuario con el correo 
         const dbUsuario = new Usuario( req.body );
-
+        console.log(dbUsuario);
         //hashear la contraseña 
         const salt = bcrypt.genSaltSync();
         dbUsuario.password = bcrypt.hashSync(password, salt);;
         //Generare el JWT
-        const token = await generarJWT({uid: dbUsuario.uid, nombre: dbUsuario.name})
+        const token = await generarJWT({uid: dbUsuario._id, nombre: dbUsuario.name})
 
         //Crear el registro en la base de datos     
         await dbUsuario.save();
@@ -38,6 +38,7 @@ const newUser = async (req = request, res = response) => {
         return res.status(200).json({
             ok: true,
             uid: dbUsuario.id,
+            email,
             msg: `El usuario ${name} fue creado exitosamente`,
             token
         })
@@ -86,7 +87,8 @@ const login = async (req = request , res = response) => {
         return res.status(200).json({
             ok: true,
             uid: usuario.id,
-            name: usuario.name,
+            nombre: usuario.name,
+            email: usuario.email,
             token
         })
         
@@ -103,15 +105,19 @@ const login = async (req = request , res = response) => {
 
 const tokenValidator =  async (req = request, res = response) => {
     /* Obtenemos los datos de la request */
-    const {uid, nombre} = req;
+    const {uid} = req;
+    // Consulta ala bd
+
+    const userDB = await Usuario.findById(uid)
     
     /* Generamos un nuevo JWT */
-    const token = await generarJWT({uid,nombre})
+    const token = await generarJWT({uid, nombre: userDB.name})
 
     return res.json({
         ok: true,
         uid,
-        nombre,
+        nombre: userDB.name,
+        email: userDB.email,
         token,
         msg: 'token validato'
     });

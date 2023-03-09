@@ -18,6 +18,7 @@ const validateHeaderJWT  = (req = request, res = response, next) => {
         req.uid = uid;
         req.nombre = nombre;
     } catch (error) {
+        console.log(error);
         return res.status(401).json({
             ok: false,
             msg: 'Error en el token...'
